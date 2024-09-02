@@ -290,9 +290,9 @@ Explicação:
 - Dados Iniciais: Definimos um array de produtos simulando um banco de dados. (Banco de dados simulado que já existia)
 
 
-## Implementação dos Endpoints REST
+## Implementação dos Endpoints REST no servidor Backend
 
-- ** GET /produtos - Obter todos os produtos**
+- **GET /produtos - Obter todos os produtos**
 
 ```javascript
 // Obter todos os produtos
@@ -301,11 +301,119 @@ app.get('/produtos', (req, res) => {
 });
 ```
 
-** PAREI AQUI! **
+- **GET /produtos - Obter um produto específico**
+
+```javascript
+// Obter um produto específico pelo ID
+app.get('/produtos/:id', (req, res) => {
+    const produtoId = parseInt(req.params.id);
+    const produto = produtos.find(p => p.id === produtoId);
+
+    if (produto) {
+        res.status(200).json(produto);
+    } else {
+        res.status(404).json({ message: 'Produto não encontrado' });
+    }
+});
+```
+
+- **POST /produtos - Adicionar um novo produto**
+
+```javascript
+// Adicionar um novo produto
+app.post('/produtos', (req, res) => {
+    const novoProduto = req.body;
+    novoProduto.id = produtos.length + 1; // Gerar um ID único para o novo produto
+    produtos.push(novoProduto);
+    res.status(201).json(novoProduto);
+});
+```
+
+- **PUT /produtos - Adicionar um produto existente**
+
+```javascript
+// Atualizar um produto existente pelo ID
+app.put('/produtos/:id', (req, res) => {
+    const produtoId = parseInt(req.params.id);
+    const produtoIndex = produtos.findIndex(p => p.id === produtoId);
+
+    if (produtoIndex !== -1) {
+        produtos[produtoIndex] = { ...produtos[produtoIndex], ...req.body };
+        res.status(200).json(produtos[produtoIndex]);
+    } else {
+        res.status(404).json({ message: 'Produto não encontrado' });
+    }
+});
+```
+
+- **DELETE /produtos - Remover um produto**
+
+```javascript
+// Remover um produto pelo ID
+app.delete('/produtos/:id', (req, res) => {
+    const produtoId = parseInt(req.params.id);
+    const produtoIndex = produtos.findIndex(p => p.id === produtoId);
+
+    if (produtoIndex !== -1) {
+        produtos.splice(produtoIndex, 1);
+        res.status(200).json({ message: 'Produto removido com sucesso' });
+    } else {
+        res.status(404).json({ message: 'Produto não encontrado' });
+    }
+});
+```
+
+## Integrando funcionalidades da API de CRUD no FrontEnd
+
+Você pode atualizar o frontend `(script.js)` para permitir a adição, edição, e remoção de produtos.
+
+Adicione no HTML um formulário para criar novos produtos:
+
+```html
+<form id="novoProdutoForm">
+    <h3>Adicionar Novo Produto</h3>
+    <input type="text" id="nome" placeholder="Nome do Produto" required>
+    <input type="number" id="precoUnitario" placeholder="Preço Unitário" required>
+    <input type="number" id="quantidade" placeholder="Quantidade" required>
+    <input type="text" id="categoria" placeholder="Categoria" required>
+    <input type="text" id="fabricanteNome" placeholder="Nome do Fabricante" required>
+    <input type="text" id="fabricanteEndereco" placeholder="Endereço do Fabricante" required>
+    <button type="submit">Adicionar Produto</button>
+</form>
+```
+
+E no `script.js`, adicione a lógica para enviar o produto à API:
+
+```javascript
+document.getElementById('novoProdutoForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const novoProduto = {
+        nome: document.getElementById('nome').value,
+        precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
+        quantidade: parseInt(document.getElementById('quantidade').value),
+        categoria: document.getElementById('categoria').value,
+        fabricante: {
+            nome: document.getElementById('fabricanteNome').value,
+            endereco: document.getElementById('fabricanteEndereco').value
+        }
+    };
+
+    fetch('http://localhost:3000/produtos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(novoProduto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Produto adicionado:', data);
+        consumirAPI(); // Atualizar a lista de produtos
+    })
+    .catch(error => console.log('Erro ao adicionar produto:', error));
+});
+```
 
 
 ## Conclusão
 -- DESCONSIDERAR
-Parabéns! Você agora tem uma calculadora de Bitcoin que não só busca o preço atual de Bitcoin, mas também calcula e exibe o valor em USD das posses de Bitcoin que o usuário insere. Além disso, você aprendeu a usar o localStorage para armazenar dados localmente e a manipular o DOM com JavaScript puro.
-
-Agora é hora de adicionar funcionalidades ou personalizações ao projeto! Por exemplo, você pode adicionar um seletor de moeda ou exibir gráficos de preços históricos. As possibilidades são infinitas!
+Agora, você tem uma aplicação completa que utiliza Node.js e Express para fornecer uma **API RESTful** com suporte completo para operações **CRUD**. O frontend interage com a API para permitir a **visualização**, **adição**, **atualização** e **remoção** de produtos. Essa prática oferece uma excelente introdução ao desenvolvimento de aplicações web com backend em Node.js.
