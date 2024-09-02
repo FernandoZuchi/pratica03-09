@@ -13,6 +13,7 @@ mkdir lista-de-produtos // Cria a pasta
 cd lista-de-produtos // Entra na pasta
 npm init -y // Estrutura básica servidor node.js
 npm install express // Instala a dependência express
+npm install cors // Instala a dependência cors (Interação multiplataformas)
 ```
 
 ## Desenvolvimento do Backend (Node.js e Express)
@@ -80,7 +81,7 @@ app.listen(porta, () => {
 node index.js
 ```
 
-## Desenvolvimento do Backend (Node.js e Express)
+## Desenvolvimento do FrontEnd (HTML, CSS & JS)
 
 - Criar o arquivo `index.html`:
 
@@ -196,16 +197,18 @@ Adiante, vamos expandir a aplicação anterior adicionando os demais métodos RE
   
 **Instalar Dependências**
 
+**DESENVOLVIMENTO - PAREI AQUI. Ainda não instalei e configurei nodemon**
+
 ```prompt
-npm install cors body-parser nodemon
+npm install body-parser nodemon
 ```
 
 Descrição das dependências que usamos até aqui:
 
 - express: Framework web para Node.js.
 - cors: Middleware para habilitar CORS (Cross-Origin Resource Sharing).
-- body-parser: Middleware para parsear o corpo das requisições.
-- nodemon: Ferramenta para reiniciar automaticamente o servidor quando alterações são feitas no código.
+- **body-parser**: Middleware para converter o corpo das requisições.
+- **nodemon**: Ferramenta para reiniciar automaticamente o servidor quando alterações são feitas no código.
 
 Estrutura do projeto até aqui
 
