@@ -326,8 +326,6 @@ app.get('/produtos/:id', (req, res) => {
 ```
 
 - **POST /produtos - Adicionar um novo produto**
-
-**PAREI AQUI! ACESSAR O ENDPOINT NÃO CRIA O PRODUTO**
   
 ```javascript
 // Adicionar um novo produto
@@ -341,6 +339,8 @@ app.post('/produtos', (req, res) => {
     res.status(201).json(novoProduto);
 });
 ```
+
+**OBS:** Para adicionar um novo produto, precisamos de uma requisição no lado do cliente (FrontEnd). Então, vamos tratar isso futuramente, mas nosso endpoint para criação de produtos já está criado. Será na rota `localhost:3000/produtos`
 
 - **PUT /produtos - Atualizar um produto existente**
 
@@ -370,6 +370,8 @@ app.put('/produtos/:id', (req, res) => {
 });
 ```
 
+**OBS:** Para atualizar um produto existente, precisamos de uma requisição no lado do cliente (FrontEnd). Então, vamos tratar isso futuramente, mas nosso endpoint para atualizar um produto específico já está criado. Será na rota `localhost:3000/produtos/:id`
+
 - **DELETE /produtos - Remover um produto**
 
 ```javascript
@@ -386,6 +388,10 @@ app.delete('/produtos/:id', (req, res) => {
     }
 });
 ```
+
+**OBS:** Para deletar um produto existente, precisamos de uma requisição no lado do cliente (FrontEnd). Então, vamos tratar isso futuramente, mas nosso endpoint para deletar um produto específico já está criado. Será na rota `localhost:3000/produtos/:id`
+
+**PAREI AQUI**
 
 ## Integrando funcionalidades da API de CRUD no FrontEnd
 
