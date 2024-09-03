@@ -36,8 +36,7 @@ const produtos = [
         categoria: "Periféricos",
         fabricante: {
             nome: "GamerPro",
-            endereco: "Rua das Pedras, 321, São Paulo, SP",
-            telefone: "(11) 98765-4321"
+            endereco: "Rua das Pedras, 321, São Paulo, SP"
         }
     },
     {
@@ -47,8 +46,7 @@ const produtos = [
         categoria: "Periféricos",
         fabricante: {
             nome: "TecLab",
-            endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ",
-            telefone: "(21) 91234-5678"
+            endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ"
         }
     },
     {
@@ -58,8 +56,7 @@ const produtos = [
         categoria: "Eletrônicos",
         fabricante: {
             nome: "UltraVision",
-            endereco: "Rua das Gramas, 789, Curitiba, PR",
-            telefone: "(41) 99876-5432"
+            endereco: "Rua das Gramas, 789, Curitiba, PR"
         }
     }
 ];
@@ -227,7 +224,7 @@ lista-de-produtos/
 
 No arquivo do servidor `backend/index.js`, faça as seguintes alterações:
 
-```
+```javascript
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -247,8 +244,7 @@ const produtos = [
     categoria: "Periféricos",
     fabricante: {
       nome: "GamerPro",
-      endereco: "Rua das Pedras, 321, São Paulo, SP",
-      telefone: "(11) 98765-4321"
+      endereco: "Rua das Pedras, 321, São Paulo, SP"
     }
   },
   {
@@ -259,8 +255,7 @@ const produtos = [
     categoria: "Periféricos",
     fabricante: {
       nome: "TecLab",
-      endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ",
-      telefone: "(21) 91234-5678"
+      endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ"
     }
   },
   {
@@ -271,8 +266,7 @@ const produtos = [
     categoria: "Eletrônicos",
     fabricante: {
       nome: "UltraVision",
-      endereco: "Rua das Gramas, 789, Curitiba, PR",
-      telefone: "(41) 99876-5432"
+      endereco: "Rua das Gramas, 789, Curitiba, PR"
     }
   }
 ];
@@ -391,31 +385,90 @@ app.delete('/produtos/:id', (req, res) => {
 
 **OBS:** Para deletar um produto existente, precisamos de uma requisição no lado do cliente (FrontEnd). Então, vamos tratar isso futuramente, mas nosso endpoint para deletar um produto específico já está criado. Será na rota `localhost:3000/produtos/:id`
 
-**PAREI AQUI**
 
 ## Integrando funcionalidades da API de CRUD no FrontEnd
 
-Você pode atualizar o frontend `(script.js)` para permitir a adição, edição, e remoção de produtos.
+Você pode atualizar o frontend `index.html`, `style.css` & `script.js` para permitir a adição, atualização, e remoção de produtos.
+
+## Adição de produtos - Método POST(API Rest) / Método Create(CRUD)
 
 Adicione no HTML um formulário para criar novos produtos:
 
 ```html
-<form id="novoProdutoForm">
-    <h3>Adicionar Novo Produto</h3>
-    <input type="text" id="nome" placeholder="Nome do Produto" required>
-    <input type="number" id="precoUnitario" placeholder="Preço Unitário" required>
-    <input type="number" id="quantidade" placeholder="Quantidade" required>
-    <input type="text" id="categoria" placeholder="Categoria" required>
-    <input type="text" id="fabricanteNome" placeholder="Nome do Fabricante" required>
-    <input type="text" id="fabricanteEndereco" placeholder="Endereço do Fabricante" required>
-    <button type="submit">Adicionar Produto</button>
-</form>
+<!-- Formulário para adicionar produtos -->
+    <form id="produtoForm" class="produto-form">
+        <div class="form-group">
+            <label for="nome">Nome do Produto:</label>
+            <input type="text" id="nome" name="nome" required>
+            <label for="precoUnitario">Preço:</label>
+            <input type="number" id="precoUnitario" name="precoUnitario" required>
+            <label for="quantidade">Quantidade:</label>
+            <input type="number" id="quantidade" name="quantidade" required>
+            <label for="categoria">Categoria:</label>
+            <input type="text" id="categoria" name="categoria" required>
+            <label for="fabricante">Nome do Fabricante:</label>
+            <input type="text" id="fabricante" name="fabricante" required>
+            <button type="submit">Adicionar Produto</button>
+        </div>
+    </form>
+```
+
+Vamnos aproveitar e adicionar a estilização para esse formulário:
+
+```css
+.produto-form {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #007BFF;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
 ```
 
 E no `script.js`, adicione a lógica para enviar o produto à API:
 
 ```javascript
-document.getElementById('novoProdutoForm').addEventListener('submit', function(event) {
+document.getElementById('produtoForm').addEventListener('submit', (event) => {
     event.preventDefault();
 
     const novoProduto = {
@@ -423,10 +476,146 @@ document.getElementById('novoProdutoForm').addEventListener('submit', function(e
         precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
         quantidade: parseInt(document.getElementById('quantidade').value),
         categoria: document.getElementById('categoria').value,
-        fabricante: {
-            nome: document.getElementById('fabricanteNome').value,
-            endereco: document.getElementById('fabricanteEndereco').value
-        }
+        fabricante: document.getElementById('fabricante').value
+    };
+
+    fetch('http://localhost:3000/produtos', {
+        method: 'POST',
+        headers: { 'Content-Type' : 'application/json' },
+        body: JSON.stringify(novoProduto)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Produto adicionado!');
+        consumirAPI(); // Atualiza a lista de produtos
+    })
+    .catch(error => console.log('Erro ao adicionar produto' , error));
+});
+```
+
+## Atualização de produtos - Método PUT(API Rest) / Método Update(CRUD)
+## Remoção de produtos - Método DELETE(API Rest) / Método Delete(CRUD)
+
+Vamos agora, utilizar os Endpoints da API que estão criados, porém não integrados no FrontEnd. Vamos fazer essa integração agora criando botões de **DELETAR** e **ATUALIZAR** produtos existentes.
+
+Para isso, vamos começar alterando o `produtoCard.innerHTML` localizado na linha 12 do nosso arquivo `script.js`:
+
+```javascript
+produtoCard.innerHTML = `
+                <h2>${produto.nome}</h2>
+                <p><strong>Preço:</strong> R$ ${produto.precoUnitario}</p>
+                <p><strong>Quantidade:</strong> ${produto.quantidade}</p>
+                <p><strong>Categoria:</strong> ${produto.categoria}</p>
+                <p><strong>Fabricante:</strong> ${produto.fabricante}</p>
+                <button class="editar-btn" data-id="${produto.id}">Editar</button>
+                <button class="deletar-btn" data-id="${produto.id}">Deletar</button>
+            `
+```
+
+No arquivo `script.js`, vamos modificar a função consumirAPI para incluir os botões "Editar" e "Deletar" dentro de cada cartão de produto. Adicionaremos também as funções necessárias para manipular esses eventos de clique nos botões:
+
+Dentro do `.then()` da linha 4, após a criação do cardProduto, adicione o seguinte: 
+
+```javascript
+ // Adicionar event listeners para os botões "Editar" e "Deletar"
+        document.querySelectorAll('.editar-btn').forEach(button => {
+            button.addEventListener('click', editarProduto);
+        });
+
+        document.querySelectorAll('.deletar-btn').forEach(button => {
+            button.addEventListener('click', deletarProduto);
+        });
+```
+
+Após isso podemos criar a função `editarProduto()` responsável por conectar-nos ao endpoint da API Rest criado para essa funcionalidade do CRUD.
+
+```javascript
+function editarProduto(event) {
+    const produtoId = event.target.getAttribute('data-id');
+    fetch(`http://localhost:3000/produtos/${produtoId}`)
+        .then(response => response.json())
+        .then(produto => {
+            // Preencher o formulário com os dados do produto para edição
+            document.getElementById('nome').value = produto.nome;
+            document.getElementById('precoUnitario').value = produto.precoUnitario;
+            document.getElementById('quantidade').value = produto.quantidade;
+            document.getElementById('categoria').value = produto.categoria;
+            document.getElementById('fabricante').value = produto.fabricante;
+            
+            // Remover o evento de submit atual e adicionar um novo para atualizar o produto
+            const form = document.getElementById('produtoForm');
+            form.removeEventListener('submit', adicionarProduto);
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                atualizarProduto(produtoId);
+            });
+        })
+        .catch(error => console.log('Erro ao carregar produto para edição: ', error));
+}
+```
+
+Agora criaremos a função que envia o produto atualizado para o servidor backend, usando novamente um endpoint da API que criamos:
+
+```javascript
+function atualizarProduto(produtoId) {
+    const produtoAtualizado = {
+        nome: document.getElementById('nome').value,
+        precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
+        quantidade: parseInt(document.getElementById('quantidade').value),
+        categoria: document.getElementById('categoria').value,
+        fabricante: document.getElementById('fabricante').value
+    };
+
+    fetch(`http://localhost:3000/produtos/${produtoId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(produtoAtualizado)
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Produto atualizado com sucesso!');
+        consumirAPI(); // Atualiza a lista de produtos
+
+        // Restaurar o formulário para adicionar novos produtos
+        const form = document.getElementById('produtoForm');
+        form.reset();
+        form.removeEventListener('submit', atualizarProduto);
+        form.addEventListener('submit', adicionarProduto);
+    })
+    .catch(error => console.log('Erro ao atualizar produto', error));
+}
+```
+
+Após isso, podemos criar mais uma função para utilizar o endpoint criado para remover produtos do fake banco de dados.
+
+```javascript
+function deletarProduto(event) {
+    const produtoId = event.target.getAttribute('data-id');
+
+    fetch(`http://localhost:3000/produtos/${produtoId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('Produto removido com sucesso!');
+        consumirAPI(); // Atualiza a lista de produtos
+    })
+    .catch(error => console.log('Erro ao deletar produto', error));
+}
+```
+
+Para finalizar com chave de ouro, podemos reorganizar esse uso do endpoint POST para criar produtos, vamos transformá-lo também numa função:
+
+```javascript
+function adicionarProduto(event) {
+    event.preventDefault();
+
+    const novoProduto = {
+        nome: document.getElementById('nome').value,
+        precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
+        quantidade: parseInt(document.getElementById('quantidade').value),
+        categoria: document.getElementById('categoria').value,
+        fabricante: document.getElementById('fabricante').value
     };
 
     fetch('http://localhost:3000/produtos', {
@@ -436,14 +625,25 @@ document.getElementById('novoProdutoForm').addEventListener('submit', function(e
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Produto adicionado:', data);
-        consumirAPI(); // Atualizar a lista de produtos
+        alert('Produto adicionado!');
+        consumirAPI(); // Atualiza a lista de produtos
     })
-    .catch(error => console.log('Erro ao adicionar produto:', error));
-});
+    .catch(error => console.log('Erro ao adicionar produto', error));
+}
+
+document.getElementById('produtoForm').addEventListener('submit', adicionarProduto);
+window.onload = consumirAPI;
 ```
 
 
+Perfeito! Estamos utilizando os métodos GET, POST, PUT, DELETE da API Rest & os métodos Create, Update, Read, Delete do CRUD no Backend e Frontend integrados uns aos outros!
+
 ## Conclusão
--- DESCONSIDERAR
+
 Agora, você tem uma aplicação completa que utiliza Node.js e Express para fornecer uma **API RESTful** com suporte completo para operações **CRUD**. O frontend interage com a API para permitir a **visualização**, **adição**, **atualização** e **remoção** de produtos. Essa prática oferece uma excelente introdução ao desenvolvimento de aplicações web com backend em Node.js.
+
+Parábens por chegar até aqui! Tenho certeza que o esforço e dedicação de vocês nas aulas práticas fazem diferença em suas formações. Por isso venho buscando sempre criar práticas envolvendo conceitos o mais voltados pro mercado possível! Espero que tenham gostado dessa prática e a partir do momento que vocês entrar neste link, o repositório é de vocês. Recomendo fortemente que refaçam o que foi feito na prática seguindo o roteiro preparado pra vocês, qualquer dúvida falem comigo!
+
+Fernando Zuchi - (32) 99164-1182
+
+Até mais, dev's!
