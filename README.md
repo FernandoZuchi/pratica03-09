@@ -6,11 +6,11 @@ Utilize o método GET para através de um enpoint retornar todos os produtos des
 
 ## Configuração do Ambiente
 
-Criar a pasta lista-de-produtos e inicializar o Node.js
+Criar a pasta lista-de-produtos, backend e inicializar o Node.js 
 
 ```prompt
-mkdir lista-de-produtos // Cria a pasta
-cd lista-de-produtos // Entra na pasta
+mkdir backend // Cria a pasta
+cd backend // Entra na pasta
 npm init -y // Estrutura básica servidor node.js
 npm install express // Instala a dependência express
 npm install cors // Instala a dependência cors (Interação multiplataformas)
@@ -18,7 +18,7 @@ npm install cors // Instala a dependência cors (Interação multiplataformas)
 
 ## Desenvolvimento do Backend (Node.js e Express)
 
-- Criar arquivo 'index.js' para configurar o servidor:
+- Criar arquivo 'index.js' na pasta backend para configurar o servidor:
 
 ```javascript
 const express = require('express');
@@ -34,30 +34,21 @@ const produtos = [
         precoUnitario: 500,
         quantidade: 50,
         categoria: "Periféricos",
-        fabricante: {
-            nome: "GamerPro",
-            endereco: "Rua das Pedras, 321, São Paulo, SP"
-        }
+        fabricante: "Toyota"
     },
     {
         nome: "Teclado Mecânico",
         precoUnitario: 350,
         quantidade: 100,
         categoria: "Periféricos",
-        fabricante: {
-            nome: "TecLab",
-            endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ"
-        }
+        fabricante: "Nokia"
     },
     {
         nome: "Monitor 4K",
         precoUnitario: 2500,
         quantidade: 30,
         categoria: "Eletrônicos",
-        fabricante: {
-            nome: "UltraVision",
-            endereco: "Rua das Gramas, 789, Curitiba, PR"
-        }
+        fabricante: "Dell"
     }
 ];
 
@@ -75,10 +66,17 @@ app.listen(porta, () => {
 - Executar o servidor
 
 ```prompt
+cd backend
 node index.js
 ```
 
+Acesse `localhost:3000/produtos` para acessar o endpoint com uma resposta dos produtos no formato JSON, que configuramos no código.
+
+Ja temos nosso primeiro endpoint criado e rodando no servidor.
+
 ## Desenvolvimento do FrontEnd (HTML, CSS & JS)
+
+Cria uma pasta frontend, essa pasta deve ser irmã da pasta backend.
 
 - Criar o arquivo `index.html`:
 
@@ -103,49 +101,56 @@ node index.js
 - Criar o arquivo `style.css`:
 
 ```css
+/* Estiliza o corpo da página */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    color: #333;
-    margin: 0;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    font-family: Arial, sans-serif; /* Define a fonte padrão */
+    background-color: #f5f5f5; /* Cor de fundo cinza claro */
+    color: #333; /* Cor do texto cinza escuro */
+    margin: 0; /* Remove as margens padrão */
+    padding: 20px; /* Adiciona um espaço interno */
+    display: flex; /* Utiliza flexbox para layout */
+    flex-direction: column; /* Organiza os elementos em uma coluna */
+    align-items: center; /* Centraliza os itens horizontalmente */
 }
 
+/* Estiliza os títulos de nível 1 */
 h1 {
-    color: #007BFF;
-    margin-bottom: 20px;
+    color: #007BFF; /* Cor azul */
+    margin-bottom: 20px; /* Adiciona uma margem inferior */
 }
 
+/* Estiliza o container de produtos */
 .produtos-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    display: flex; /* Utiliza flexbox para layout */
+    flex-wrap: wrap; /* Permite que os elementos envolvam para a próxima linha */
+    gap: 20px; /* Adiciona um espaço entre os elementos */
+    justify-content: center; /* Centraliza os elementos horizontalmente */
 }
 
+/* Estiliza cada card de produto */
 .produto-card {
-    background-color: #ffffff;
-    padding: 15px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    background-color: #ffffff; /* Cor de fundo branca */
+    padding: 15px; /* Adiciona um espaço interno */
+    border-radius: 8px; /* Arredonda os cantos */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra */
+    width: 300px; /* Define a largura do card */
 }
 
+/* Estiliza os títulos de nível 2 dentro dos cards */
 .produto-card h2 {
-    margin-top: 0;
-    color: #007BFF;
+    margin-top: 0; /* Remove a margem superior */
+    color: #007BFF; /* Cor azul */
 }
 
+/* Estiliza os parágrafos dentro dos cards */
 .produto-card p {
-    margin: 5px 0;
+    margin: 5px 0; /* Define as margens superior e inferior */
 }
 
+/* Estiliza o texto do fabricante */
 .produto-card .fabricante {
-    font-style: italic;
-    color: #555;
+    font-style: italic; /* Define a fonte como itálico */
+    color: #555; /* Cor cinza */
 }
 
 ```
@@ -154,34 +159,48 @@ h1 {
 
 ```javascript
 function consumirAPI() {
-    fetch('http://localhost:3000/produtos')
+  // Faz uma requisição para a API local em busca dos dados dos produtos
+  fetch('http://localhost:3000/produtos')
+    // Converte a resposta da API para formato JSON
     .then(response => response.json())
+    // Processa os dados dos produtos recebidos
     .then(produtos => {
-        const produtosContainer = document.getElementById('produtosContainer');
-        produtosContainer.innerHTML = '';
+      // Seleciona o elemento HTML onde os cards dos produtos serão inseridos
+      const produtosContainer = document.getElementById('produtosContainer');
+      // Limpa o conteúdo anterior do container, caso exista
+      produtosContainer.innerHTML = '';
 
-        produtos.forEach(produto => {
-            const produtoCard = document.createElement('div');
-            produtoCard.classList.add('produto-card');
+      // Itera sobre cada produto da lista recebida
+      produtos.forEach(produto => {
+        // Cria um novo elemento div para representar o card do produto
+        const produtoCard = document.createElement('div');
+        // Adiciona a classe 'produto-card' para aplicar os estilos definidos no CSS
+        produtoCard.classList.add('produto-card');
 
-            produtoCard.innerHTML = `
-                <h2>${produto.nome}</h2>
-                <p><strong>Preço:</strong> R$ ${produto.precoUnitario.toFixed(2)}</p>
-                <p><strong>Quantidade:</strong> ${produto.quantidade}</p>
-                <p><strong>Categoria:</strong> ${produto.categoria}</p>
-                <p class="fabricante"><strong>Fabricante:</strong> ${produto.fabricante.nome}, ${produto.fabricante.endereco}</p>
-            `;
+        // Constrói o conteúdo HTML do card, inserindo os dados do produto
+        produtoCard.innerHTML = `
+          <h2>${produto.nome}</h2>
+          <p><strong>Preço:</strong> R$ ${produto.precoUnitario.toFixed(2)}</p>
+          <p><strong>Quantidade:</strong> ${produto.quantidade}</p>
+          <p><strong>Categoria:</strong> ${produto.categoria}</p>
+          <p class="fabricante"><strong>Fabricante:</strong> ${produto.fabricante}</p>
+        `;
 
-            produtosContainer.appendChild(produtoCard);
-        });
+        // Adiciona o card recém-criado ao container de produtos
+        produtosContainer.appendChild(produtoCard);
+      });
     })
+    // Captura e loga qualquer erro que ocorra durante o processo
     .catch(error => console.log('Erro ao carregar produtos: ', error));
 }
 
+// Executa a função consumirAPI quando a página é carregada
 window.onload = consumirAPI;
 ```
 
 Agora, temos nosso frontend integrado à nossa API Rest no servidor backend, explorando o método GET dessa API conseguimos obter os produtos cadastrados no banco de dados simulado.
+
+Para testar isso funcionando, você deve estar com o servidor `index.js` no backend rodando, e abrir a página `index.html` do frontend no navegador.
 
 ## **Criando um CRUD - Explorando todos métodos da API Rest**
 
@@ -193,6 +212,8 @@ Adiante, vamos expandir a aplicação anterior adicionando os demais métodos RE
 - DELETE: Remover um produto.
   
 **Instalar Dependências**
+
+No terminal da pasta `backend`
 
 ```prompt
 npm install body-parser nodemon
@@ -237,37 +258,28 @@ app.use(bodyParser.json());
 // Dados iniciais (simulando um banco de dados em memória)
 const produtos = [
   {
-    id: 1,
+    id: 1, // Adicionar um id único em cada produto
     nome: "Teclado Gamer",
     precoUnitario: 500,
     quantidade: 50,
     categoria: "Periféricos",
-    fabricante: {
-      nome: "GamerPro",
-      endereco: "Rua das Pedras, 321, São Paulo, SP"
-    }
+    fabricante: "Toyota"
   },
   {
-    id: 2,
+    id: 2, // Adicionar um id único em cada produto
     nome: "Teclado Mecânico",
     precoUnitario: 350,
     quantidade: 100,
     categoria: "Periféricos",
-    fabricante: {
-      nome: "TecLab",
-      endereco: "Av. dos Jumentos, 456, Rio de Janeiro, RJ"
-    }
+    fabricante: "Nokia"
   },
   {
-    id: 3,
+    id: 3, // Adicionar um id único em cada produto
     nome: "Monitor 4K",
     precoUnitario: 2500,
     quantidade: 30,
     categoria: "Eletrônicos",
-    fabricante: {
-      nome: "UltraVision",
-      endereco: "Rua das Gramas, 789, Curitiba, PR"
-    }
+    fabricante: "Dell"
   }
 ];
 
@@ -287,12 +299,42 @@ app.listen(porta, () => {
 Explicação:
 
 - Express: Configuramos o servidor utilizando o Express. (Dependência já existente no projeto)
-- CORS: Habilitamos o CORS para permitir requisições do frontend. (Nova dependência adicionada)
+- CORS: Habilitamos o CORS para permitir requisições do frontend. (Dependência já existente no projeto sendo utilizada)
 - Body-Parser: Permite que o servidor interprete o corpo das requisições em JSON. (Nova dependência adicionada)
-- Dados Iniciais: Definimos um array de produtos simulando um banco de dados. (Banco de dados simulado que já existia)
+- Dados Iniciais: Definimos um array de produtos simulando um banco de dados. (Banco de dados simulado que já existia, porém adicionamos um ID único neles)
+- Nodemon: Dependência nova adicionada que facilita o desenvolvimento com node, uma vez que não precisamos reiniciar o servidor sempre que fizermos uma alteração
 
+Para rodarmos o servidor utilizando nodemon, altere os scripts do `package.json`:
 
-## Implementação dos Endpoints REST no servidor Backend
+```json
+{
+  "name": "pratica03-09-fernandozuchi",
+  "version": "1.0.0",
+  "description": "fala dev",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",// Adicione essa linha
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.4"
+  }
+}
+```
+
+Agora para rodar o servidor apenas uma vez, vá no terminal na pasta do backen e rode o comando:
+
+```prompt
+npm start
+```
+
+## Implementação dos Endpoints REST no servidor `Backend/index.js`
 
 - **GET /produtos - Obter todos os produtos**
 
@@ -318,6 +360,10 @@ app.get('/produtos/:id', (req, res) => {
     }
 });
 ```
+
+Obs: Teste esse endpoint no navegador: `localhost:3000/produtos/2`
+
+
 
 - **POST /produtos - Adicionar um novo produto**
   
@@ -416,80 +462,94 @@ Adicione no HTML um formulário para criar novos produtos:
 Vamnos aproveitar e adicionar a estilização para esse formulário:
 
 ```css
+/* Estiliza o formulário de produto */
 .produto-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 400px;
+    background-color: #ffffff; /* Cor de fundo branca */
+    padding: 20px; /* Adiciona um espaço interno */
+    border-radius: 8px; /* Arredonda os cantos */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adiciona uma sombra */
+    margin-bottom: 20px; /* Adiciona uma margem inferior */
+    width: 100%; /* Define a largura como 100% */
+    max-width: 400px; /* Limita a largura máxima a 400 pixels */
 }
 
+/* Estiliza os grupos de campos do formulário */
 .form-group {
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
+    margin-bottom: 15px; /* Adiciona uma margem inferior */
+    display: flex; /* Utiliza flexbox para layout */
+    align-items: center; /* Alinha os itens no centro verticalmente */
+    justify-content: center; /* Alinha os itens no centro horizontalmente */
+    flex-direction: column; /* Organiza os elementos em uma coluna */
+    gap: 10px; /* Adiciona um espaço entre os elementos */
 }
 
+/* Estiliza os rótulos dos campos */
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #007BFF;
-    font-weight: bold;
+    display: block; /* Define como bloco */
+    margin-bottom: 5px; /* Adiciona uma margem inferior */
+    color: #007BFF; /* Cor azul */
+    font-weight: bold; /* Define o estilo da fonte como negrito */
 }
 
+/* Estiliza os campos de entrada de texto */
 .form-group input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    width: 100%; /* Define a largura como 100% */
+    padding: 8px; /* Adiciona um espaço interno */
+    border: 1px solid #ccc; /* Adiciona uma borda cinza */
+    border-radius: 4px; /* Arredonda os cantos */
 }
 
+/* Estiliza o botão de envio */
 button[type="submit"] {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-
+    background-color: #007BFF; /* Cor de fundo azul */
+    color: #fff; /* Cor do texto branca */
+    padding: 10px 15px; /* Adiciona um espaço interno */
+    border: none; /* Remove a borda */
+    border-radius: 4px; /* Arredonda os cantos */
+    cursor: pointer; /* Define o cursor como ponteiro */
+    font-size: 16px; /* Define o tamanho da fonte */
 }
 
+/* Estiliza o botão de envio ao passar o mouse */
 button[type="submit"]:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Altera a cor de fundo para um tom mais escuro */
 }
 ```
 
 E no `script.js`, adicione a lógica para enviar o produto à API:
 
 ```javascript
+// Adiciona um event listener ao formulário para capturar o evento de envio
 document.getElementById('produtoForm').addEventListener('submit', (event) => {
-    event.preventDefault();
+  // Impede o comportamento padrão do formulário, que é recarregar a página
+  event.preventDefault();
 
-    const novoProduto = {
-        nome: document.getElementById('nome').value,
-        precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
-        quantidade: parseInt(document.getElementById('quantidade').value),
-        categoria: document.getElementById('categoria').value,
-        fabricante: document.getElementById('fabricante').value
-    };
+  // Cria um objeto com os dados do novo produto, coletados dos campos do formulário
+  const novoProduto = {
+    nome: document.getElementById('nome').value,
+    precoUnitario: parseFloat(document.getElementById('precoUnitario').value),
+    quantidade: parseInt(document.getElementById('quantidade').value),
+    categoria: document.getElementById('categoria').value,
+    fabricante: document.getElementById('fabricante').value
+  };
 
-    fetch('http://localhost:3000/produtos', {
-        method: 'POST',
-        headers: { 'Content-Type' : 'application/json' },
-        body: JSON.stringify(novoProduto)
-    })
+  // Faz uma requisição POST para a API para adicionar o novo produto
+  fetch('http://localhost:3000/produtos', {
+    method: 'POST', // Indica que é uma requisição POST
+    headers: { 'Content-Type' : 'application/json' }, // Define o tipo de conteúdo como JSON
+    body: JSON.stringify(novoProduto) // Envia os dados do novo produto no corpo da requisição em formato JSON
+  })
+    // Processa a resposta da API
     .then(response => response.json())
+    // Executa uma ação após a resposta ser recebida com sucesso
     .then(data => {
-        alert('Produto adicionado!');
-        consumirAPI(); // Atualiza a lista de produtos
+      // Exibe um alerta indicando que o produto foi adicionado com sucesso
+      alert('Produto adicionado!');
+      // Atualiza a lista de produtos na página, chamando a função consumirAPI()
+      consumirAPI();
     })
-    .catch(error => console.log('Erro ao adicionar produto' , error));
+    // Captura e loga qualquer erro que possa ocorrer durante o processo
+    .catch(error => console.log('Erro ao adicionar produto', error));
 });
 ```
 
@@ -498,7 +558,7 @@ document.getElementById('produtoForm').addEventListener('submit', (event) => {
 
 Vamos agora, utilizar os Endpoints da API que estão criados, porém não integrados no FrontEnd. Vamos fazer essa integração agora criando botões de **DELETAR** e **ATUALIZAR** produtos existentes.
 
-Para isso, vamos começar alterando o `produtoCard.innerHTML` localizado na linha 12 do nosso arquivo `script.js`:
+Para isso, vamos começar alterando o `produtoCard.innerHTML` localizado dentro do `produtos.forEach` do nosso arquivo `script.js`:
 
 ```javascript
 produtoCard.innerHTML = `
@@ -514,7 +574,7 @@ produtoCard.innerHTML = `
 
 No arquivo `script.js`, vamos modificar a função consumirAPI para incluir os botões "Editar" e "Deletar" dentro de cada cartão de produto. Adicionaremos também as funções necessárias para manipular esses eventos de clique nos botões:
 
-Dentro do `.then()` da linha 4, após a criação do cardProduto, adicione o seguinte: 
+Dentro do segundo `.then()` presente na função `consumirAPI()`, após a criação(appendChild) do produtoContainer, adicione o seguinte: 
 
 ```javascript
  // Adicionar event listeners para os botões "Editar" e "Deletar"
