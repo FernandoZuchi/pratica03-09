@@ -1,8 +1,8 @@
 # Prática da semana - API Rest, CRUD, Server com Node JS
 
-Criar um objeto produto. Produto deve ter um fabricante representado por um elemento fabricante. Utilize detalhes como nome, endereço, etc. como elementos filhos de um elemento fabricante. Cada produto tem os elementos: nome do produto, preço unitário, quantidade e categoria. Insira 3 produtos neste objeto.
+Esse roteiro instrui à criação de uma API com Node JS no servidor backend, e integração desse backend com frontend, através de um CRUD de produtos. Usaremos um array de objetos produtos no servidor backend para simular um banco de dados e sua interação com o cliente(usuário)/frontend.
 
-Utilize o método GET para através de um enpoint retornar todos os produtos deste objeto.
+Vamos começar!
 
 ## Configuração do Ambiente
 
